@@ -28,7 +28,7 @@ class User extends Authenticatable
     ];
 
 
-    public function campaign(){
-        $this->hasOne('Insightful\Campaign');
+    public function campaigns(){
+        return $this->hasMany('Insightful\Campaign');
     }
 }

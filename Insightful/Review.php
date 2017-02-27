@@ -13,29 +13,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-    public $id;
-    public $author;
-    public $date;
-    public $text;
-    public $rating;
-    public $num_words;
+    /*    public $id;
+        public $author;
+        public $date;
+        public $text;
+        public $rating;
+        public $num_words;
+        public $source_id;*/
 
 
-
-    public function keywords(){
-        $this->hasMany('Insightful\Keyword');
+    public function keywords()
+    {
+        return $this->hasMany('Insightful\Keyword');
     }
 
 
-    public function campaign(){
-        $this->hasOne('Insightful\Campaign');
+    public function campaign()
+    {
+        return $this->belongsTo('Insightful\Campaign');
     }
 
-    public function source(){
-        $this->hasOne('Insightful\Source');
+    public function source()
+    {
+        return $this->hasOne('Insightful\Source');
     }
 
-    public function id() {
-        return $this->id;
-    }
 }

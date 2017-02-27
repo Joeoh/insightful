@@ -17,4 +17,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/dashboard', 'CampaignController@index');
+
+Route::get('/create', 'Campaign\NewCampaign@index');
+Route::post('/create', 'Campaign\NewCampaign@store');
+
+
+Route::get('/campaign/{id}', 'Campaign\Single@view');

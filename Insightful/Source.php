@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Source extends Model
 {
-    public $id;
+/*    public $id;
     public $name;
-    public $domain;
+    public $domain;*/
 
 }

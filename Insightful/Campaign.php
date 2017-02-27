@@ -14,16 +14,11 @@ use Illuminate\Database\Eloquent\Model;
 class Campaign extends Model
 {
 
-    public $id;
-    public $business_name;
-    public $yelp_slug;
-
     public function user(){
-        $this->hasOne('App\User');
+        $this->belongsTo('App\User');
     }
 
-
     public function reviews() {
-        $this->hasMany('Insightful\Review');
+       return $this->hasMany('Insightful\Review');
     }
 }

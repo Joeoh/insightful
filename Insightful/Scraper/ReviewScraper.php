@@ -43,4 +43,10 @@ abstract class ReviewScraper
 
         return $reviewsInRequiredDateRange;
     }
+
+
+    //Wrap inbuilt method incase we need to alter text before
+    public static function countWords(string $text) : int {
+        return str_word_count($text);
+    }
 }

@@ -10,14 +10,14 @@ namespace Insightful\Scraper;
 
 
 use Carbon\Carbon;
-use Insightful\Review;
+use Insightful\RetrievedReview;
 use Sunra\PhpSimple\HtmlDomParser;
 
 class YelpReviewScraper extends ReviewScraper
 {
 
     const baseUrl = "https://www.yelp.ie/biz/";
-    const sourceCode = "yelp.ie";
+    const sourceCode = 1;
     const maximumRating = 5.0;
     const minimumRating = 0.0;
     const reviewsPerPage = 20;
@@ -73,15 +73,16 @@ class YelpReviewScraper extends ReviewScraper
         $reviewObjects = [];
 
         foreach ($reviews as $review) {
-            $reviewObject = new Review();
-            $reviewObject->percentage = ($review->reviewRating->ratingValue / self::maximumRating) * 100;
+            $reviewObject = new RetrievedReview();
+            $reviewObject->rating = ($review->reviewRating->ratingValue / self::maximumRating) * 100;
             $reviewObject->date = $review->datePublished;
             if ($this->latestReview == null) {
                 $this->latestReview = Carbon::createFromFormat("Y-m-d", $reviewObject->date);
             }
             $reviewObject->text = $review->description;
-            $reviewObject->source = self::sourceCode;
-            $reviewObject->userName = $review->author;
+            $reviewObject->source_id = self::sourceCode;
+            $reviewObject->author = $review->author;
+            $reviewObject->num_words = self::countWords($review->description);
             $reviewObjects[] = $reviewObject;
         }
 
