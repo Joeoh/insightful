@@ -8,7 +8,7 @@
 
 namespace Insightful\Scraper;
 
-use Insightful\UnprocessedReview;
+use Insightful\Review;
 use simplehtmldom_1_5\simple_html_dom;
 use Sunra\PhpSimple\HtmlDomParser;
 
@@ -34,7 +34,7 @@ class TripAdvisorReviewScraper extends ReviewScraper
         $reviewElements = $html->find('.reviewSelector');
 
         foreach ($reviewElements as $reviewElement) {
-            $review = new UnprocessedReview();
+            $review = new Review();
             $reviewText = ($reviewElement->find(".entry > p")[0]->text());
             echo $reviewText;
             $review->text = htmlspecialchars_decode($reviewText,ENT_QUOTES);

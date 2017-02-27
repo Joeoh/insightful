@@ -10,7 +10,7 @@ namespace Insightful\Scraper;
 
 
 use Carbon\Carbon;
-use Insightful\UnprocessedReview;
+use Insightful\Review;
 use Sunra\PhpSimple\HtmlDomParser;
 
 class YelpReviewScraper extends ReviewScraper
@@ -73,7 +73,7 @@ class YelpReviewScraper extends ReviewScraper
         $reviewObjects = [];
 
         foreach ($reviews as $review) {
-            $reviewObject = new UnprocessedReview();
+            $reviewObject = new Review();
             $reviewObject->percentage = ($review->reviewRating->ratingValue / self::maximumRating) * 100;
             $reviewObject->date = $review->datePublished;
             if ($this->latestReview == null) {
