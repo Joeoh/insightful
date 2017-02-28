@@ -2,6 +2,8 @@
 namespace Insightful\Parser;
 
 use GuzzleHttp\Client;
+use Insightful\Review;
+use Insightful\Sentence;
 
 /**
  * Created by PhpStorm.
@@ -14,12 +16,12 @@ class ReviewParser
     const CSAPI_URL = "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/";
     const API_ENV_KEY = "MS_API_KEY";
 
-    private static function buildDocument(string $reviewDocument, string $id) : array
+    private static function buildDocument(string $documentText, string $id) : array
     {
         $document = [];                    //create document
         $document['language'] = 'en';
         $document['id'] = (string)$id;
-        $document['text'] = $reviewDocument;
+        $document['text'] = $documentText;
 
         return $document;
     }
@@ -42,47 +44,28 @@ class ReviewParser
     }
 
 
-    //Takes a review and splits it into documents with incrementing IDs
-    private static function splitIntoDocuments(string $text, int $index) : array
-    {
-        $sentenceOffset = 0;
-
-        // Index documents by the Id of the review and a decimal, eg 1.0,1.1...1.10
-        $sentences = self::splitToSentence($text);        //split by sentence
-        $documents = [];
-        foreach ($sentences as $sentence) {
-            $id = (string)$index . "." . $sentenceOffset++;
-            $documents[] = self::buildDocument($sentence, $id);
-        }
-
-        return $documents;
-    }
-
 
     /**
      *
-     * @param array $reviews Array of \Insight\Review objects
+     * @param \Illuminate\Database\Eloquent\Collection $sentences of \Insight\Sentence objects
      * @return array Returns Array of arrays of sentiment and phrases
      *                       Returns Array of arrays of sentiment and phrases
      * @internal param array $review_texts String array of review text
      */
-    public static function parseReviews(array $reviews) : array
+    public static function parseSentences($sentences) : array
     {
 
-        $numReviews = sizeof($reviews);
-        //Don't for-see this happening soon. Eventually below could will need to be split to batch based on 10k Document limit
-        if ($numReviews > 3000) {
-            echo "Fatal Error: More than 3000 (" . $numReviews . ")reviews being parsed into one call. Entries may be lost due to API limits";
-            die();
+        //Nothing to do
+        if (sizeof($sentences) == 0) {
+            return ['sentiment' => [], 'phrases' => []];
         }
-
 
         $client = new Client(['base_uri' => self::CSAPI_URL]);
 
 
         $documents = [];
-        foreach ($reviews as $review) {            //each full review
-            $documents[] = self::splitIntoDocuments($review->text, $review->id);
+        foreach ($sentences as $sentence) {            //each sentence
+            $documents[] = self::buildDocument($sentence->text, $sentence->id);
         }
 
         //Collection of Documents to be sent
@@ -101,6 +84,7 @@ class ReviewParser
                 'json'    => $body
             ]);
 
+
             $sentiment = json_decode($sentiment_response->getBody(), true);//decode response to array that can be parsed
             $phrases = json_decode($phrase_response->getBody(), true);
 
@@ -112,10 +96,37 @@ class ReviewParser
 
         } catch (\GuzzleHttp\Exception\ClientException $e){
             //Catch error - print it and throw again for command line to catch
+            print_r($e->getResponse()->getBody());
             $failMessage = $e->getResponse()->getBody()->getContents();
             $decoded = json_decode($failMessage, true);
-            var_dump($decoded);
+            print_r($decoded);
             throw $e;
         }
+    }
+
+
+    //Split reviews into sentences and store
+    public static function parseReviewsToSentences()
+    {
+        $reviews = Review::all()->where('parsed',false);
+
+
+        foreach ($reviews as $review){
+            $sentences = self::splitToSentence($review->text);
+            $i = 0;
+            foreach ($sentences as $sentenceText){
+                $sentence = new Sentence;
+                $sentence->text = $sentenceText;
+                $sentence->review_id = $review->id;
+                $sentence->position = $i++;
+                $sentence->parsed = false;
+                $sentence->save();
+            }
+
+            $review->parsed = true;
+            $review->save();
+        }
+
+        return $reviews;
     }
 }

@@ -15,11 +15,9 @@ class Keyword extends Model
 {
 
     protected $table = "review_keywords";
-/*    public $position;
-    public $word;*/
 
-    public function review(){
-        return $this->belongsTo('Insightful\Review');
+    public function sentence(){
+        return $this->belongsTo('Insightful\Sentence');
     }
 
 }
