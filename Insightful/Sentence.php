@@ -19,4 +19,9 @@ class Sentence extends Model
         return $this->belongsTo('Insightful\Review');
     }
 
+    public function keywords()
+    {
+        return $this->hasMany('Insightful\Keyword');
+    }
+
 }

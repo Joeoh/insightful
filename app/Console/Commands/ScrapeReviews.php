@@ -43,26 +43,13 @@ class ScrapeReviews extends Command
      */
     public function handle()
     {
-        //Get all pages to scrape from the DB
-        //Pass them to scraper
-        //Insert Results
-        //$reviews = TripAdvisorReviewScraper::getReviewsAfterDate("Restaurant_Review-g212087-d10124871-Reviews-Fia-Rathgar_County_Dublin.html", Carbon::now()->subWeeks(3));
-        //$nextTenBase = "https://www.tripadvisor.ie/Restaurant_Review-g212087-d10124871-Reviews-or10-Fia-Rathgar_County_Dublin.html#REVIEWS";
-
-        $date = Carbon::now()->subYear(2);
-        $startDate = Carbon::createFromFormat('Y-m-d H:i:s', $date->format('Y-m-d 00:00:00')); //ensure date is start of given day
-
-
-
-        $yelpScraper = new YelpReviewScraper("queen-of-tarts-dublin-4");
-        $reviews = $yelpScraper->getReviewsAfterDate($startDate);
 
         //Get all campaigns
         $campaigns = Campaign::all();
 
         foreach ($campaigns as $campaign){
             $yelpScraper = new YelpReviewScraper($campaign->yelp_slug);
-            $reviews = $yelpScraper->getReviewsAfterDate($startDate);
+            $reviews = $yelpScraper->getReviewsAfterDate($campaign->getDateOfLastReviewStored());
 
             foreach ($reviews as $review){
                 $storeReview = new Review;

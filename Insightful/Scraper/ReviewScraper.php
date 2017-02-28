@@ -30,11 +30,11 @@ abstract class ReviewScraper
 
 
     //Checks array of Reviews and only returns those with a date greater than the cutoff
-    protected static function removeReviewsOutsideRange(array $reviews, \DateTime $date) : array
+    protected static function removeReviewsOutsideRange(array $reviews, \Carbon\Carbon $date) : array
     {
         $reviewsInRequiredDateRange = [];
         foreach ($reviews as $review){
-            $currentReviewDate = Carbon::createFromFormat("Y-m-d",$review->date);
+            $currentReviewDate = Carbon::createFromFormat("Y-m-d H:m:i",$review->date);
             if(!$currentReviewDate->greaterThan($date)){
                 continue;
             }

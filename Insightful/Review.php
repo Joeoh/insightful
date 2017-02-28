@@ -22,9 +22,9 @@ class Review extends Model
         public $source_id;*/
 
 
-    public function keywords()
+    public function sentences()
     {
-        return $this->hasMany('Insightful\Keyword');
+        return $this->hasMany('Insightful\Sentence');
     }
 
 

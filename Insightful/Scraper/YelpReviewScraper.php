@@ -75,9 +75,10 @@ class YelpReviewScraper extends ReviewScraper
         foreach ($reviews as $review) {
             $reviewObject = new RetrievedReview();
             $reviewObject->rating = ($review->reviewRating->ratingValue / self::maximumRating) * 100;
-            $reviewObject->date = $review->datePublished;
+            $dateObject = Carbon::createFromFormat("Y-m-d", $review->datePublished)->hour(0)->minute(0)->second(0);
+            $reviewObject->date = $dateObject;
             if ($this->latestReview == null) {
-                $this->latestReview = Carbon::createFromFormat("Y-m-d", $reviewObject->date);
+                $this->latestReview = $dateObject;
             }
             $reviewObject->text = $review->description;
             $reviewObject->source_id = self::sourceCode;

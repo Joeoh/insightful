@@ -27,14 +27,14 @@ class CampaignController extends Controller
         $user = \Auth::user();
 
         $campaigns = $user->campaigns;
-        $numCampaigns = sizeof($campaigns);
+        $numCampaigns = $user->campaigns()->count();
 
 
         if ($numCampaigns > 1) {
             return view('campaign.list')->with('campaigns', $campaigns);
         } else {
             if ($numCampaigns == 1) {
-                $id = $campaigns[0]->id;
+                $id = $user->campaigns()->first()->id;
 
                 return redirect('/campaign/' . $id);
             } else {
