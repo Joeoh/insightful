@@ -13,15 +13,15 @@ function drawLineChart() {
 
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Month');
-    data.addColumn('number', 'Room');
-    data.addColumn('number', 'Food');
-    data.addColumn('number', 'Service');
+    data.addColumn('number', 'Overall Satisfaction');
+    //data.addColumn('number', 'Food');
+    //data.addColumn('number', 'Service');
 
     data.addRows([
-        ['Sep',  35, 50, 95],
-        ['Oct',  45, 65, 75],
-        ['Nov',  55, 60, 55],
-        ['Dec',  75, 50, 35]
+        ['Sep',  35],//, 50, 95],
+        ['Oct',  45],//, 65, 75],
+        ['Nov',  55],// 60, 55],
+        ['Dec',  75],// 50, 35]
     ]);
 
 

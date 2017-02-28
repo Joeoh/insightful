@@ -42,7 +42,5 @@ function drawPieChart() {
     chart.draw(data, options);
 }
 
-$(window).resize(function(){
-    drawBarChart();
-    drawPieChart();
-});
+
+
