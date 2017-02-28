@@ -1,0 +1,64 @@
+
+body{
+
+  background:  #FFFFFF;
+}
+
+.jumbotron{
+
+  background:;
+
+
+}
+
+.well{
+
+  background:#;
+
+}
+
+
+.jumbotron h1{
+
+  font-weight: bold;
+  font-family: "Trebuchet MS", Helvetica, sans-serif; 
+  padding-left: 20px;
+  color: #;
+
+}
+
+.jumbotron  h3{
+
+  padding-left: 30px;
+  font-weight: normal;
+  color: #;
+
+}
+
+.well h1{
+
+  font-family: sans-serif;
+  text-align: center;
+  color: #;
+  
+}
+
+#well1, #sentiment{
+
+  margin-right: 0px;
+}
+
+.navbar{
+
+  margin-bottom: 0px;
+
+}
+
+
+ h3#h31, h3#h32{
+
+    text-align: center;
+  }
+
+
+
