@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart', 'controls']});
+      google.charts.setOnLoadCallback(drawStuff);
+
+      function drawStuff() {
+
+        var dashboard = new google.visualization.Dashboard(
+          document.getElementById('programmatic_dashboard_div'));
+
+        // We omit "var" so that programmaticSlider is visible to changeRange.
+        var programmaticSlider = new google.visualization.ControlWrapper({
+          'controlType': 'CategoryFilter',
+          'containerId': 'programmatic_control_div',
+          'options': {
+            'filterColumnLabel': 'key Word',
+            'ui': {'labelStacking': 'vertical'}
+          }
+        });
+
+        var programmaticChart  = new google.visualization.ChartWrapper({
+          'chartType': 'ColumnChart',
+          'containerId': 'programmatic_chart_div',
+          'options': {
+            'width': 300,
+            'height': 300,
+            'legend': 'key Word',
+            'chartArea': {'left': 15, 'top': 15, 'right': 0, 'bottom': 0},
+          }
+        });
+
+        var data = google.visualization.arrayToDataTable([
+          ['key Word', 'positive', 'Negative'],
+          ['Rooms', 80,20],
+          ['Staff', 50,50 ],
+          ['Food', 30,70 ],
+          ['Overall experience', 60, 40]
+        ]);
+
+        dashboard.bind(programmaticSlider, programmaticChart);
+        dashboard.draw(data);
+
+ 
+
+        changeOptions = function() {
+          programmaticChart.draw();
+	  programmaticSlider.draw();
+        };
+      }
+
+    </script>
+  </head>
+  <body>
+    <div id="programmatic_dashboard_div" style="border: 1px solid #ccc">
+      <table class="columns">
+        <tr>
+          <td>
+            <div id="programmatic_control_div" style="padding-left: 2em; min-width: 250px"></div>
+          <td>
+            <div id="programmatic_chart_div"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
