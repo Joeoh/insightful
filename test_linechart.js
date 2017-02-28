@@ -1,23 +1,33 @@
+var x = 1;
+
 google.charts.load('current', {'packages':['corechart','line']});
 google.charts.setOnLoadCallback(drawChart);
 
 function drawChart() {
+	if (x==0)
+	{
+		x = 1;
+	}
+	else
+	{
+		x = 0;
+	}
   	// Alternative approach
-    /*var data = google.visualization.arrayToDataTable([
+    var data0 = google.visualization.arrayToDataTable([
     ['Month', 'Room', 'Food', 'Service'],
-	['Sep',  50, 60, 55],
-	['Oct',  65, 65, 45],
-	['Nov',  75, 77, 70],
-	['Dec',  60, 89, 69]
-    ]);*/
+	['Sep',  10, 50, 70],
+	['Oct',  20, 70, 40],
+	['Nov',  40, 60, 90],
+	['Dec',  80, 65, 80]
+    ]);
 
-	var data = new google.visualization.DataTable();
-	data.addColumn('string', 'Month');
-	data.addColumn('number', 'Room');
-	data.addColumn('number', 'Food');
-	data.addColumn('number', 'Service');
+	var data1 = new google.visualization.DataTable();
+	data1.addColumn('string', 'Month');
+	data1.addColumn('number', 'x1');
+	data1.addColumn('number', 'x2');
+	data1.addColumn('number', 'x3');
 
-	data.addRows([
+	data1.addRows([
 		['Sep',  50, 60, 55],
 		['Oct',  65, 65, 45],
 		['Nov',  75, 77, 70],
@@ -37,5 +47,12 @@ function drawChart() {
     var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
     //var chart = new google.charts.Line(document.getElementById('linechart_material'));
 
-    chart.draw(data, /*google.charts.Line.convertOptions(options)*/options);
+    if (x == 0)
+    {
+    	chart.draw(data0, /*google.charts.Line.convertOptions(options)*/options);    
     }
+    else if(x == 1)
+    {
+    	chart.draw(data1, /*google.charts.Line.convertOptions(options)*/options);
+    }
+}
