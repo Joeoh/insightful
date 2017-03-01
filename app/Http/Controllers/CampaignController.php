@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use Illuminate\Http\Request;
-
 class CampaignController extends Controller
 {
     /**
@@ -27,19 +24,8 @@ class CampaignController extends Controller
         $user = \Auth::user();
 
         $campaigns = $user->campaigns;
-        $numCampaigns = $user->campaigns()->count();
 
+        return view('campaign.list')->with('campaigns', $campaigns);
 
-        if ($numCampaigns > 1) {
-            return view('campaign.list')->with('campaigns', $campaigns);
-        } else {
-            if ($numCampaigns == 1) {
-                $id = $user->campaigns()->first()->id;
-
-                return redirect('/campaign/' . $id);
-            } else {
-                return redirect('create');
-            }
-        }
     }
 }

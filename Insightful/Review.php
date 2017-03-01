@@ -38,4 +38,9 @@ class Review extends Model
         return $this->hasOne('Insightful\Source');
     }
 
+    public function sentiment() : float
+    {
+        return round($this->sentences()->avg('sentiment') * 100);
+    }
+
 }

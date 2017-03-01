@@ -44,8 +44,9 @@ class NewCampaign extends \App\Http\Controllers\Controller
         $campaign->business_name = $businessName;
         $campaign->yelp_slug = $yelpSlug;
         $campaign->user_id = $user->id;
-        $id = $campaign->save();
+        $campaign->save();
 
-        return redirect('/campaign/'. $id);
+
+        return redirect('/dashboard/');
     }
 }

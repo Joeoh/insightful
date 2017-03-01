@@ -36,6 +36,9 @@ class Single extends \App\Http\Controllers\Controller
     public function view($id)
     {
         $campaign = Campaign::find($id);
+        if ($campaign == null){
+            return redirect('dashboard');
+        }
 
         $user = \Auth::user();
 
@@ -45,23 +48,34 @@ class Single extends \App\Http\Controllers\Controller
 
         $numReviews = $campaign->getNumberOfReviews();
 
-
-        $popularKeywords = $campaign->getKeywords();
+        $keywordsWithSentiment = $campaign->getKeywordsWithSentimentForPeriod(Carbon::now()->subYear(5), Carbon::now());
 
 
         $sinceDate = Carbon::now()->subWeeks(2)->hour(0)->minute(0)->second(0);
 
         $averageSentiment = $campaign->getAverageSentimentForPeriod(Carbon::now()->subYear(5), Carbon::now());
+
+        $remainingPercentage = (100 - $averageSentiment);
+
+        $percentages = [
+          "averagePercentage" =>   $averageSentiment,
+          "remainingPercentage" =>   $remainingPercentage,
+        ];
+
         $sentimentLastTwoWeeks = $campaign->getAverageSentimentForPeriod($sinceDate, Carbon::now());
+
         $lastReview = $campaign->getDateOfLastReviewStored();
         $weeksSinceLastReview = $lastReview->diffInWeeks(Carbon::now());
 
-        $lastFiveWeeks = $campaign->sentimentForPreviousWeeks(20 + $weeksSinceLastReview);
-        echo "<pre>";
-        print_r($lastFiveWeeks);
-        echo "</pre>";
+        $latestReviews = $campaign->getLastReviews(3);
 
-        return view('campaign.landing', compact('campaign','popularKeywords','averageSentiment','sentimentLastTwoWeeks','numReviews'));
+
+        $weeksData = $campaign->sentimentForPreviousWeeks(40 + $weeksSinceLastReview);
+
+        $weeksDataJson = \json_encode($weeksData);
+
+        return view('campaign.index', compact('campaign','averageSentiment','sentimentLastTwoWeeks','numReviews',
+                                                'weeksDataJson', 'keywordsWithSentiment','latestReviews','percentages'));
     }
 
 
