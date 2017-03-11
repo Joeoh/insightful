@@ -40,12 +40,31 @@ function drawChart() {
 		curveType: 'function',
 		legend: { position: 'right' },
 		theme: 'material',
+		pointSize: 5,
 		width: 900,
 		height: 500
 	};
 
     var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
     //var chart = new google.charts.Line(document.getElementById('linechart_material'));
+    google.visualization.events.addListener(chart, 'select', function() {
+    	var selection = chart.getSelection();
+    	if (selection[0] !== undefined && selection[0].row !== null)
+    	{
+    		switch(selection[0].column)
+    		{
+    			case 1:
+    			window.open('http://jc.netsoc.ie/deadline', '_blank');
+    			break;
+    			case 2:
+    			window.open('http://google.ie/#q=JC', '_blank');
+    			break;
+    			case 3:
+    			window.open('http://jc.netsoc.ie', '_blank');
+    		}
+    	}
+    	//window.open('http://jc.netsoc.ie/deadline', '_blank');
+    });
 
     if (x == 0)
     {
