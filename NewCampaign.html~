@@ -97,7 +97,7 @@
             <small class="form-text text-muted">For example if your business URL is
                 <mark>https://www.yelp.ie/biz/my-business</mark>
                 , then enter
-                <mark>my-business</mark>
+                <mark>biz/my-business</mark>
             </small>
         </div>
         <div class="form-group has-danger">
