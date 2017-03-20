@@ -34,6 +34,26 @@ function drawChart() {
 		['Dec',  60, 89, 69]
 		]);
 
+	// Add noise to overlapping points in the chart.
+	for (var i = 0; i < data0.getNumberOfRows(); i++)
+	{
+		for (var j = 1; j < data0.getNumberOfColumns(); j++)
+		{
+			// For each element in a column,
+			var k = data0.getValue(i, j);
+			// Iterate through all the elements after it,
+			while (++j < data0.getNumberOfColumns())
+			{
+				//If any other element overlaps with it,
+				if (k === data0.getValue(i,j))
+				{
+					//Add noise(0.5) to that other element.
+					data0.setValue(i, j, data0.getValue(i,j)+0.5);
+				}
+			}
+		}
+	}
+
 
 	var options = {
 		title: 'Trend of Satisfaction',
@@ -51,17 +71,10 @@ function drawChart() {
     	var selection = chart.getSelection();
     	if (selection[0] !== undefined && selection[0].row !== null)
     	{
-    		switch(selection[0].column)
-    		{
-    			case 1:
-    			window.open('http://jc.netsoc.ie/deadline', '_blank');
-    			break;
-    			case 2:
-    			window.open('http://google.ie/#q=JC', '_blank');
-    			break;
-    			case 3:
-    			window.open('http://jc.netsoc.ie', '_blank');
-    		}
+    		//display the label of the datapoint selected
+    		console.log(data0.getColumnLabel(selection[0].column));
+    		console.log(selection[0].column,selection[0].row);
+    		//[selection[0].row+1][selection[0].column]
     	}
     	//window.open('http://jc.netsoc.ie/deadline', '_blank');
     });
