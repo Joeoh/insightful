@@ -13,18 +13,6 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="well">
-
-                    <h1>Campaign Overview</h1>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <div class="container">
         <div class="row">
@@ -71,23 +59,21 @@
 
     <div class='container-fluid'>
 
-        @foreach ($keywordsWithSentiment->slice(0,3) as $keyword)
+        @foreach ($keywordsWithSentiment->slice(0,6) as $keyword)
 
 
-            <div class="row">
-                <div class="col-xs-6">
-                    <h3>{{ $keyword->word }}:</h3>
+            <div class="col-xs-6">
+                <h3>{{ $keyword->word }}:</h3>
 
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ $keyword->average_sentiment }}"
-                             aria-valuemin="0"
-                             aria-valuemax="100"
-                             style="width: 60%;">
-                            {{ $keyword->average_sentiment }}%
-                        </div>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar"
+                         aria-valuenow="{{ round($keyword->average_sentiment) }}"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         style="width: {{round($keyword->average_sentiment)}}%;">
+                        {{ round($keyword->average_sentiment) }}%
                     </div>
                 </div>
-
             </div>
         @endforeach
 
@@ -137,13 +123,15 @@
     <div class="container">
 
 
-            @foreach($latestReviews as $review)
+        @foreach($latestReviews as $review)
             <div class="row">
-
-            <div class="col-xs-12">
+                <div class="col-xs-12">
                     <div class="jumbotron">
                         <p>"{{ $review->text }}"</p>
                         <span>{{ $review->sentiment() }}% Positive</span>
+                        <span> - {{ $review->author }}</span>
+                        <span class="right" style="float:right;">{{ $review->rating }}
+                            % - {{ Carbon\Carbon::parse($review->date)->format('d-m-Y') }}</span>
                     </div>
                 </div>
             </div>

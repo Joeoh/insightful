@@ -31,8 +31,8 @@ class Campaign extends Model
     {
         $last = $this->reviews()->orderBy('date', 'desc')->first();
         if ($last == null) {
-            //Set date as last 5 years
-            return Carbon::now()->subYear(5);
+            //Set date as last 20 years
+            return Carbon::now()->subYear(20);
         } else {
             $date = Carbon::createFromFormat('Y-m-d H:i:s', $last->date);
 

@@ -42,7 +42,7 @@ class YelpReviewScraper extends ReviewScraper
         }
 
         //Not +1 as we have already done the first page
-        $numPagesRemaining = $numReviews / self::reviewsPerPage;
+        $numPagesRemaining = $this->totalReviews % self::reviewsPerPage;
 
         for ($i = 0; $i <= $numPagesRemaining; $i++) {
             $offset = self::reviewsPerPage + (self::reviewsPerPage * $i);

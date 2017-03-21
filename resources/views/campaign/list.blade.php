@@ -1,23 +1,22 @@
-Here are all your campaigns:
+@include("campaign.header")
 
-<table>
-    <tr>
-        <th>id</th><th>Business Name</th><th>Yelp Slug</th><th></th>
-    </tr>
-    @foreach ($campaigns as $campaign)
-        <tr>
-            <td>
-                {{ $campaign->id }}
-            </td>
-            <td>
-                {{ $campaign->business_name }}
-            </td>
-            <td>
-                {{ $campaign->yelp_slug }}
-            </td>
-            <td>
-                <a href="/campaign/{{ $campaign->id }}">View Campaign</a>
-            </td>
-        </tr>
-    @endforeach
-</table>
+<div class="container">
+    <div class="container">
+
+        <h1>Campaigns</h1>
+
+        @foreach($campaigns->chunk(3) as $campaignsChunk)
+            <div class="row">
+                @foreach($campaignsChunk as $campaign)
+
+                <div class="col-xs-4">
+                    <div class="jumbotron">
+                        <h3>{{ $campaign->business_name }}</h3>
+                        <span><a href="/campaign/{{ $campaign->id }}">Details</a></span>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        @endforeach
+    </div>
+</div>

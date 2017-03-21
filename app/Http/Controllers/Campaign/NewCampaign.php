@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Campaign;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Insightful\Campaign;
 
 class NewCampaign extends \App\Http\Controllers\Controller
@@ -47,6 +48,12 @@ class NewCampaign extends \App\Http\Controllers\Controller
         $campaign->save();
 
 
+        //TODO: Make this methods concurrent
+        Artisan::call('scrape');
+        Artisan::call('parse');
+
         return redirect('/dashboard/');
+
+
     }
 }

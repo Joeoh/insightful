@@ -48,7 +48,7 @@ class Single extends \App\Http\Controllers\Controller
 
         $numReviews = $campaign->getNumberOfReviews();
 
-        $keywordsWithSentiment = $campaign->getKeywordsWithSentimentForPeriod(Carbon::now()->subYear(5), Carbon::now());
+        $keywordsWithSentiment = $campaign->getKeywordsWithSentimentForPeriod(Carbon::now()->subYear(20), Carbon::now());
 
 
         $sinceDate = Carbon::now()->subWeeks(2)->hour(0)->minute(0)->second(0);
@@ -58,8 +58,8 @@ class Single extends \App\Http\Controllers\Controller
         $remainingPercentage = (100 - $averageSentiment);
 
         $percentages = [
-          "averagePercentage" =>   $averageSentiment,
-          "remainingPercentage" =>   $remainingPercentage,
+          "averagePercentage" =>   round($averageSentiment),
+          "remainingPercentage" =>   round($remainingPercentage),
         ];
 
         $sentimentLastTwoWeeks = $campaign->getAverageSentimentForPeriod($sinceDate, Carbon::now());
@@ -70,7 +70,7 @@ class Single extends \App\Http\Controllers\Controller
         $latestReviews = $campaign->getLastReviews(3);
 
 
-        $weeksData = $campaign->sentimentForPreviousWeeks(40 + $weeksSinceLastReview);
+        $weeksData = $campaign->sentimentForPreviousWeeks(2000 + $weeksSinceLastReview);
 
         $weeksDataJson = \json_encode($weeksData);
 

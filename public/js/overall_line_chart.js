@@ -31,7 +31,6 @@ function drawLineChart() {
 
     var options = {
         //title: 'Trend of Satisfaction',
-        curveType: 'function',
         legend: { position: 'right' },
         theme: 'material',
         //width: 900,
@@ -43,7 +42,7 @@ function drawLineChart() {
 
     chart.draw(data, /*google.charts.Line.convertOptions(options)*/options);
 
-    $(window).smartresize(function () {
+    $(window).resize(function () {
         chart.draw(data, options);
     });
 
