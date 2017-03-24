@@ -65,6 +65,12 @@ function drawChart() {
 		height: 500
 	};
 
+	function selectHandler(label, key)
+	{
+		$(".modal-body > p").text(label + ", " + key);
+		$("#myModal").modal();
+	}
+
     var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
     //var chart = new google.charts.Line(document.getElementById('linechart_material'));
     google.visualization.events.addListener(chart, 'select', function() {
@@ -73,7 +79,8 @@ function drawChart() {
     	{
     		//display the label of the datapoint selected
     		console.log(data0.getColumnLabel(selection[0].column));
-    		console.log(selection[0].column,selection[0].row);
+    		console.log(data0.getValue(selection[0].row,0));
+    		selectHandler(data0.getColumnLabel(selection[0].column),data0.getValue(selection[0].row,0))
     		//[selection[0].row+1][selection[0].column]
     	}
     	//window.open('http://jc.netsoc.ie/deadline', '_blank');
