@@ -5,18 +5,14 @@
       google.charts.load('current', {'packages':['corechart', 'controls']});
       google.charts.setOnLoadCallback(drawStuff);
 
+	var data;
     var dataview;
-	var toggle = 3;//chart can't have less than 2 columns (index 1, index 2) this is to prevent lowering it 
-	var isWordToggled = [1,1,1,1];//boolean array for buttons 0=hide word, 1 = show word
-	var displayedKeywordIndexes = [0,1,2,3];
-    function drawStuff(input) {
-	  
-		var dashboard = new google.visualization.Dashboard(
-			document.getElementById('dashboard_div'));
-		  
-		//placeholder data table this will be called in using a different function
-		
-		var data = new google.visualization.DataTable();
+	var toggle; //chart can't have less than 2 columns (index 1, index 2) this is to prevent lowering it 
+	var isWordToggled;//boolean array for buttons 0=hide word, 1 = show word
+	var displayedKeywordIndexes;
+	
+	function initialise(){
+		data = new google.visualization.DataTable();
 			data.addColumn('date', 'Date');
 			data.addColumn('number', 'food');
 			data.addColumn('number', 'staff');
@@ -39,6 +35,27 @@
 			[new Date(2017, 1, 14),  4.2,  6.2,  3.4]
 		]);
 		
+		dataview = new google.visualization.DataView(data);
+		
+		toggle = 3;
+		isWordToggled = [1,1,1,1];
+		displayedKeywordIndexes = [0,1,2,3];
+		
+	}
+	
+	function getColumnName(index){
+		
+		return data.getColumnLabel(index);
+	
+	}
+	
+    function drawStuff(input) {
+	  
+		var dashboard = new google.visualization.Dashboard(
+			document.getElementById('dashboard_div'));
+		  
+		
+		
 		var programmaticChart  = new google.visualization.ChartWrapper({
 			'chartType': 'LineChart',
 			'containerId': 'programmatic_chart_div',
@@ -59,7 +76,7 @@
         });
 		
 		
-		//handler for button inputs
+		
 		
 		if(input > 0)
 		{
@@ -92,14 +109,15 @@
     </script>
   </head>
 
-  <body>
+  <body onload="initialise()">
 	<div id="dashboard_div" style="border: 1px solid #ccc" onload="drawStuff('0')">
-	<button onclick="drawStuff('1')">food</button>
-	<button onclick= "drawStuff('2')">staff</button>
-	<button onclick= "drawStuff('3')">rooms</button>
+	<button id = "word1" type="button" onclick="drawStuff('1')" onmouseover='document.getElementById("word1").innerHTML = getColumnName(1)'></button>
+	<button id = "word2" type="button" onclick="drawStuff('2')" onmouseover='document.getElementById("word2").innerHTML = getColumnName(2)'></button>
+	<button id = "word3" type="button" onclick="drawStuff('3')" onmouseover='document.getElementById("word3").innerHTML = getColumnName(3)'></button>
 	<button onclick= "drawStuff('0')">restore</button>
 		<div id="programmatic_chart_div"></div>
 		<div id="dateSlider_div"></div>
 	</div>
+	
   </body>
 </html>
