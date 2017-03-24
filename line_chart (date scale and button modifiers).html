@@ -1,0 +1,105 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart', 'controls']});
+      google.charts.setOnLoadCallback(drawStuff);
+
+    var dataview;
+	var toggle = 3;//chart can't have less than 2 columns (index 1, index 2) this is to prevent lowering it 
+	var isWordToggled = [1,1,1,1];//boolean array for buttons 0=hide word, 1 = show word
+	var displayedKeywordIndexes = [0,1,2,3];
+    function drawStuff(input) {
+	  
+		var dashboard = new google.visualization.Dashboard(
+			document.getElementById('dashboard_div'));
+		  
+		//placeholder data table this will be called in using a different function
+		
+		var data = new google.visualization.DataTable();
+			data.addColumn('date', 'Date');
+			data.addColumn('number', 'food');
+			data.addColumn('number', 'staff');
+			data.addColumn('number', 'rooms');
+			
+			data.addRows([
+			[new Date(2017, 1, 1),  37.8, 80.8, 41.8], //(YYYY,MM,DD) months are an array so Jan is 0 feb is 1 etc
+			[new Date(2017, 1, 2),  30.9, 69.5, 32.4],
+			[new Date(2017, 1, 3),  25.4,   57, 25.7],
+			[new Date(2017, 1, 4),  11.7,18.8, 10.5],
+			[new Date(2017, 1, 5),  11.9,17.6, 10.4],
+			[new Date(2017, 1, 6),  8.8, 13.6,  7.7],
+			[new Date(2017, 1, 7),   7.6, 12.3,  9.6],
+			[new Date(2017, 1, 8),  12.3, 29.2, 10.6],
+			[new Date(2017, 1, 9),  16.9, 42.9, 14.8],
+			[new Date(2017, 1, 10), 12.8, 30.9, 11.6],
+			[new Date(2017, 1, 11),  5.3,  7.9,  4.7],
+			[new Date(2017, 1, 12),  6.6,  8.4,  5.2],
+			[new Date(2017, 1, 13),  4.8,  6.3,  3.6],
+			[new Date(2017, 1, 14),  4.2,  6.2,  3.4]
+		]);
+		
+		var programmaticChart  = new google.visualization.ChartWrapper({
+			'chartType': 'LineChart',
+			'containerId': 'programmatic_chart_div',
+			'options': {
+				title: 'Trend of Satisfaction',
+				theme: 'material',
+				vAxis: { ticks: [0,25,50,75,100] }
+
+			}
+        });
+		
+		var dateSlider = new google.visualization.ControlWrapper({
+          'controlType': 'DateRangeFilter',
+          'containerId': 'dateSlider_div',
+          'options': {
+            'filterColumnLabel': 'Date'
+          }
+        });
+		
+		
+		//handler for button inputs
+		
+		if(input > 0)
+		{
+			if( isWordToggled[Number(input)] = "1" && toggle > 1)
+			{
+				dataview.hideColumns([Number(input)]);
+				displayedKeywordIndexes[Number(input)] = null;
+				isWordToggled[Number(input)] = 0;
+				toggle--;
+			}
+			else if(isWordToggled[input] = "0" && toggle < 4)
+			{
+				displayedKeywordIndexes[Number(input)] = Number(input);
+				dataview.setColumns(displayedKeywordIndexes);
+				isWordToggled[Number(input)] = 1;
+				toggle++;
+			}
+		}
+		else
+		{
+			dataview = new google.visualization.DataView(data);
+			toggle = 3;
+		}
+		
+		dashboard.bind(dateSlider,programmaticChart);
+		dashboard.draw(dataview);
+		
+	}
+
+    </script>
+  </head>
+
+  <body>
+	<div id="dashboard_div" style="border: 1px solid #ccc" onload="drawStuff('0')">
+	<button onclick="drawStuff('1')">food</button>
+	<button onclick= "drawStuff('2')">staff</button>
+	<button onclick= "drawStuff('3')">rooms</button>
+	<button onclick= "drawStuff('0')">restore</button>
+		<div id="programmatic_chart_div"></div>
+		<div id="dateSlider_div"></div>
+	</div>
+  </body>
+</html>
