@@ -68,40 +68,50 @@ class ReviewParser
             $documents[] = self::buildDocument($sentence->text, $sentence->id);
         }
 
-        //Collection of Documents to be sent
-        $body = [                                            //body of API call
-            "documents" => $documents
-        ];
-
-        try{
-            $phrase_response = $client->post('keyPhrases/', [    //key phrases API call
-                'headers' => self::getHeaders(),
-                'json'    => $body
-            ]);
-
-            $sentiment_response = $client->post('sentiment/', [    //sentiment API call
-                'headers' => self::getHeaders(),
-                'json'    => $body
-            ]);
+        $parts = array_chunk($documents, 1000);
+        $sentiments = array();
+        $keyPhrases = array();
+        //Break the documents up into parts less than 1000
+        foreach ($parts as $part) {
 
 
-            $sentiment = json_decode($sentiment_response->getBody(), true);//decode response to array that can be parsed
-            $phrases = json_decode($phrase_response->getBody(), true);
+            //Collection of Documents to be sent
+            $body = [                                            //body of API call
+                "documents" => $part
+            ];
 
-            $sentiments = $sentiment['documents'];
-            $keyPhrases = $phrases['documents'];
+            try{
+                $phrase_response = $client->post('keyPhrases/', [    //key phrases API call
+                    'headers' => self::getHeaders(),
+                    'json'    => $body
+                ]);
+
+                $sentiment_response = $client->post('sentiment/', [    //sentiment API call
+                    'headers' => self::getHeaders(),
+                    'json'    => $body
+                ]);
 
 
-            return ['sentiment' => $sentiments, 'phrases' => $keyPhrases];
+                $sentiment = json_decode($sentiment_response->getBody(),
+                    true);//decode response to array that can be parsed
+                $phrases = json_decode($phrase_response->getBody(), true);
 
-        } catch (\GuzzleHttp\Exception\ClientException $e){
-            //Catch error - print it and throw again for command line to catch
-            print_r($e->getResponse()->getBody());
-            $failMessage = $e->getResponse()->getBody()->getContents();
-            $decoded = json_decode($failMessage, true);
-            print_r($decoded);
-            throw $e;
+                $sentiments = array_merge($sentiments, $sentiment['documents']);
+                $keyPhrases = array_merge($keyPhrases ,$phrases['documents']);
+
+
+
+            } catch (\GuzzleHttp\Exception\ClientException $e){
+                //Catch error - print it and throw again for command line to catch
+                print_r($e->getResponse()->getBody());
+                $failMessage = $e->getResponse()->getBody()->getContents();
+                $decoded = json_decode($failMessage, true);
+                print_r($decoded);
+                throw $e;
+            }
         }
+        return ['sentiment' => $sentiments, 'phrases' => $keyPhrases];
+
     }
 
 

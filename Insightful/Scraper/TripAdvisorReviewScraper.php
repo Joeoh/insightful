@@ -158,7 +158,7 @@ class TripAdvisorReviewScraper extends ReviewScraper
             $ratingElement = $reviewElement->find('.sprite-rating_s_fill',0);
             if(!empty($ratingElement)){
                 $reviewRating = ($ratingElement->alt);
-                $review->rating = intval(substr($reviewRating,0,1));
+                $review->rating = (intval(substr($reviewRating,0,1)) / 5) * 100;
             }
             $review->source_id = self::sourceCode;
             $authorElement = $reviewElement->find('.scrname',0);

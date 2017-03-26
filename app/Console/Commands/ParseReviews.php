@@ -45,7 +45,7 @@ class ParseReviews extends Command
         ReviewParser::parseReviewsToSentences();
 
 
-        $sentences = Sentence::all()->where('parsed',0)->take(1000);
+        $sentences = Sentence::all()->where('parsed',0);
 
         $res = ReviewParser::parseSentences($sentences);
 
