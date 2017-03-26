@@ -27,12 +27,39 @@ class Campaign extends Model
     }
 
 
+    public function getDateOfLastReviewStoredForSource(int $sourceId)
+    {
+        $last = $this->reviews()->orderBy('date', 'desc')->where('source_id', $sourceId)->first();
+        if ($last == null) {
+            //Set date as last 20 years
+            return Carbon::now()->subYear(20);
+        } else {
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $last->date);
+
+            return $date;
+        }
+    }
+
     public function getDateOfLastReviewStored()
     {
         $last = $this->reviews()->orderBy('date', 'desc')->first();
         if ($last == null) {
             //Set date as last 20 years
             return Carbon::now()->subYear(20);
+        } else {
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $last->date);
+
+            return $date;
+        }
+    }
+
+    //Returns the date of the first review for the campaign
+    public function getDateOfFirstReview()
+    {
+        $last = $this->reviews()->orderBy('date', 'asc')->first();
+        if ($last == null) {
+            //Set date as last 20 years
+            return null;
         } else {
             $date = Carbon::createFromFormat('Y-m-d H:i:s', $last->date);
 
@@ -57,6 +84,15 @@ class Campaign extends Model
         $reviews = $this->reviews()->orderBy('date','desc')->limit($numReviews)->get();
 
         return $reviews;
+    }
+
+
+    /*
+     * Return collection of reviews in a time period
+     * */
+    public function getReviewsForPeriod(Carbon $start, Carbon $end){
+        return $this->reviews()->where('date','>=', $start)->where('date','<=',$end)->get();
+
     }
 
     /*
@@ -125,26 +161,27 @@ class Campaign extends Model
             ->join('sentences', 'reviews.id', 'sentences.review_id')
             ->join('review_keywords', 'review_keywords.sentence_id', 'sentences.id')
             ->where('campaign_id', $this->id)
+            ->having('count','>', 3)
             ->groupBy('review_keywords.word')
             ->orderBy('count', 'desc')
             ->get();
     }
 
 
-    //Returns array of sentiment for $numWeeks previous
-    public function sentimentForPreviousWeeks(int $numWeeks)
+    //Returns array of sentiment for period
+    //Starts at beginning of the $start week and ends of $end week
+    public function sentimentForPeriod(Carbon $start, Carbon $end)
     {
 
-        $startOfCurrentWeek = Carbon::now()->startOfWeek();
+        $curWeekStart = $start->startOfWeek();
+        $end = $end->endOfWeek();
 
-        $startOfFirstWeek = $startOfCurrentWeek->subWeeks($numWeeks);
 
         $weeks = [];
-        $curWeekStart = $startOfFirstWeek;
 
-        for ($i = 0; $i < $numWeeks; $i++) {
+        while ($curWeekStart->lessThanOrEqualTo($end)) {
             $endOfCurWeek = $curWeekStart->copy()->endOfWeek();
-            $weeks[$i] = [
+            $weeks[] = [
                 "startDate" => $curWeekStart->toDateString(),
                 "endDate"   => $endOfCurWeek->toDateString(),
                 "sentiment" => $this->getAverageSentimentForPeriod($curWeekStart, $endOfCurWeek)
@@ -153,5 +190,10 @@ class Campaign extends Model
         }
 
         return $weeks;
+    }
+
+
+    public function getReviewsWithKeywordInPeriod($keyword, Carbon $start, Carbon $end){
+        return $this->reviews()->where('text', 'LIKE', '%'.$keyword.'%')->where('date', '>=', $start)->where('date', '<=', $end)->get();
     }
 }

@@ -13,6 +13,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get('/reviews-with-keyword/{campaign}/{start-date}/{end-date}/{keyword}', "ApiController@reviewsWithKeyword");

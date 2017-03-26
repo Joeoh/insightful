@@ -44,24 +44,43 @@ class ScrapeReviews extends Command
     public function handle()
     {
 
-        //Get all campaigns
         $campaigns = Campaign::all();
 
-        foreach ($campaigns as $campaign){
-            $yelpScraper = new YelpReviewScraper($campaign->yelp_slug);
-            $reviews = $yelpScraper->getReviewsAfterDate($campaign->getDateOfLastReviewStored());
+        foreach ($campaigns as $campaign) {
+            if ($campaign->yelp_slug != "") {
+                $yelpScraper = new YelpReviewScraper($campaign->yelp_slug);
+                $reviews = $yelpScraper->getReviewsAfterDateForSource($campaign->getDateOfLastReviewStored(YelpReviewScraper::sourceCode));
 
-            foreach ($reviews as $review){
-                $storeReview = new Review;
-                $storeReview->author = $review->author;
-                $storeReview->date = $review->date;
-                $storeReview->text = $review->text;
-                $storeReview->rating = $review->rating;
-                $storeReview->num_words = $review->num_words;
-                $storeReview->campaign_id = $campaign->id;
-                $storeReview->source_id = $review->source_id;
-                $storeReview->save();
+                foreach ($reviews as $review) {
+                    $storeReview = new Review;
+                    $storeReview->author = $review->author;
+                    $storeReview->date = $review->date;
+                    $storeReview->text = $review->text;
+                    $storeReview->rating = $review->rating;
+                    $storeReview->num_words = $review->num_words;
+                    $storeReview->campaign_id = $campaign->id;
+                    $storeReview->source_id = $review->source_id;
+                    $storeReview->save();
+                }
             }
+
+            if ($campaign->tripadvisor_slug != "") {
+                $tripadvisorScraper = new TripAdvisorReviewScraper($campaign->tripadvisor_slug);
+                $reviews = $tripadvisorScraper->getReviewsAfterDate($campaign->getDateOfLastReviewStoredForSource(TripAdvisorReviewScraper::sourceCode));
+
+                foreach ($reviews as $review) {
+                    $storeReview = new Review;
+                    $storeReview->author = $review->author;
+                    $storeReview->date = $review->date;
+                    $storeReview->text = $review->text;
+                    $storeReview->rating = $review->rating;
+                    $storeReview->num_words = $review->num_words;
+                    $storeReview->campaign_id = $campaign->id;
+                    $storeReview->source_id = $review->source_id;
+                    $storeReview->save();
+                }
+            }
+
 
         }
     }
