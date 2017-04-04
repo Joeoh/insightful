@@ -23,6 +23,7 @@ function drawLineChart() {
     for (var i = 0; i < jsonData.length; i++){
         var curRow = jsonData[i];
         if (curRow.sentiment == -1) continue;
+        dataColumns.push([curRow.startDate, curRow.sentiment]);
         dataColumns.push([curRow.endDate, curRow.sentiment]);
     }
 
@@ -34,7 +35,8 @@ function drawLineChart() {
         legend: { position: 'right' },
         theme: 'material',
         //width: 900,
-        height: 500
+        height: 500,
+        vAxis: {minValue: 0}
     };
 
     var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));

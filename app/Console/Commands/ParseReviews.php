@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Insightful\Campaign;
 use Insightful\Keyword;
 use Insightful\Parser\ReviewParser;
@@ -41,18 +42,17 @@ class ParseReviews extends Command
      */
     public function handle()
     {
-
         ReviewParser::parseReviewsToSentences();
 
 
-        $sentences = Sentence::all()->where('parsed',0)->take(1000);
+        $sentences = Sentence::all()->where('parsed',0);
 
         $res = ReviewParser::parseSentences($sentences);
 
         $sentiments = $res['sentiment'];
         $keyPhrases = $res['phrases'];
 
-        if(sizeof($sentiments) == 0 ) die("Nothing to do\n");
+        if(sizeof($sentiments) == 0 ) return;//("Nothing to do\n");
 
 
         foreach ($sentiments as $sentiment) {

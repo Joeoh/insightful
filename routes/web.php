@@ -17,10 +17,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
+
 Route::get('/dashboard', 'CampaignController@index');
 
 Route::get('/create', 'Campaign\NewCampaign@index');
 Route::post('/create', 'Campaign\NewCampaign@store');
 
+Route::get('/api/reviews-with-keyword/{campaign}/{aroundDate}/{keyword}', 'Campaign\ApiController@reviewsWithKeyword');
 
 Route::get('/campaign/{id}', 'Campaign\Single@view');
+Route::get('/campaign/{id}/insight', 'Campaign\Single@insight');

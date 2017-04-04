@@ -1,0 +1,47 @@
+.navbar-default {
+
+  margin-bottom: 0px;
+  border-color: #fff;
+ 
+
+}
+
+.navbar-default .navbar-brand{
+
+padding-left: 50px;
+font-style: oblique; 
+font-size: 27px;
+color: #000;
+
+}
+   
+.navbar-default .navbar-brand:hover, 
+.navbar-default .navbar-brand:focus{
+ 
+ color:#0191C8;
+ background-color: transparent;
+
+}
+
+
+.navbar-default .navbar-nav > li > a:hover, 
+.navbar-default .navbar-nav > li > a:focus{
+ 
+ color:#0191C8;
+ background-color: transparent;
+
+}
+
+
+
+.navbar-default .navbar-nav > li > a{ 
+ 
+  color: #000;
+  font-family:"Lucida Console", Courier, monospace;
+  font-size: 20px;
+
+
+}
+
+
+ 
