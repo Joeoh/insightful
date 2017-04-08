@@ -1,7 +1,7 @@
 # Insightful
 Web Application for analysing online review sentiment using Azure Cognitive Services API
 
-![Insightful gathers and analyses online reviews about your business and display the results in an easy to digest format](demonstration.gif)
+![Insightful gathers and analyses online reviews about your business and displays the results in an easy to digest format](demonstration.gif)
 
 ## Contributors
 
