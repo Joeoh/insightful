@@ -104,9 +104,6 @@ function drawChart() {
 
     function selectHandler(label, key) {
 
-        console.log(label);
-        console.log(key);
-
         $("#reviewModal").modal();
         var keyWord = label;
         var date = key;
