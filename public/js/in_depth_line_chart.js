@@ -92,18 +92,17 @@ function drawChart() {
     google.visualization.events.addListener(columnFilter, 'statechange', setChartView);
 
 
-    google.visualization.events.addListener(chart, 'select', function () {
-        var selection = chart.getChart().getSelection();
-        if (selection[0] !== undefined && selection[0].row !== null) {
-            selectHandler(data.getColumnLabel(selection[0].column), data.getValue(selection[0].row, 0))
+     google.visualization.events.addListener(chart, 'select', function () {
+		var filterSelection = dashboard.getSelection();	//using this function the filtered rows will update with the chart however a downside to this is 
+														//that you HAVE to double click the point on the graph because the 1st time this function is called 
+														//it will return "undefined"
+		var columnState = columnFilter.getState(); 		//using this function will return an object that contains an array of the fitered columns
+        if (filterSelection[0] !== undefined && filterSelection[0].row !== null) {
+            selectHandler(columnState.selectedValues[filterSelection[0].column - 1], data.getValue(filterSelection[0].row, 0));																									
         }
     });
 
-
     function selectHandler(label, key) {
-
-        console.log(label);
-        console.log(key);
 
         $("#reviewModal").modal();
         var keyWord = label;
