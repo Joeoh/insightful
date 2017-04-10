@@ -98,7 +98,7 @@ function drawChart() {
 														//it will return "undefined"
 		var columnState = columnFilter.getState(); 		//using this function will return an object that contains an array of the fitered columns
         if (filterSelection[0] !== undefined && filterSelection[0].row !== null) {
-            selectHandler(columnState.selectedValues[filterSelection[0].column - 1], dataV.getValue(filterSelection[0].row, 0));																									
+            selectHandler(columnState.selectedValues[filterSelection[0].column - 1], data.getValue(filterSelection[0].row, 0));																									
         }
     });
 
